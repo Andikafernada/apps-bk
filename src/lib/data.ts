@@ -1,12 +1,3 @@
-export const students = [
-  { id: '1', name: 'Ahmad Dahlan', nis: '12345', class: 'XII-A', major: 'Science', avatarId: 'student-avatar-1', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki' },
-  { id: '2', name: 'Budi Santoso', nis: '12346', class: 'XII-B', major: 'Social', avatarId: 'student-avatar-2', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki' },
-  { id: '3', name: 'Citra Lestari', nis: '12347', class: 'XI-A', major: 'Science', avatarId: 'student-avatar-3', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Perempuan' },
-  { id: '4', name: 'Dewi Anggraini', nis: '12348', class: 'X-C', major: 'Language', avatarId: 'student-avatar-4', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Perempuan' },
-  { id: '5', name: 'Eko Prasetyo', nis: '12349', class: 'XII-C', major: 'Social', avatarId: 'student-avatar-5', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki' },
-  { id: '6', name: 'Fitriani', nis: '12350', class: 'XI-B', major: 'Science', avatarId: 'student-avatar-6', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Perempuan' },
-  { id: '7', name: 'Gilang Ramadhan', nis: '12351', class: 'X-A', major: 'Social', avatarId: 'student-avatar-7', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki' },
-];
 
 export type Treatment = {
   id: string;
@@ -128,4 +119,14 @@ export const casesByCounselor = [
   { counselor: 'Dr. Ina', count: 150 },
   { counselor: 'Mr. Budi', count: 130 },
   { counselor: 'Mrs. Ani', count: 120 },
+];
+
+export const students = [
+  { id: '1', name: 'Ahmad Dahlan', nis: '12345', class: 'XII-A', major: 'Science', avatarId: 'student-avatar-1', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki' },
+  { id: '2', name: 'Budi Santoso', nis: '12346', class: 'XII-B', major: 'Social', avatarId: 'student-avatar-2', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki' },
+  { id: '3', name: 'Citra Lestari', nis: '12347', class: 'XI-A', major: 'Science', avatarId: 'student-avatar-3', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Perempuan' },
+  { id: '4', name: 'Dewi Anggraini', nis: '12348', class: 'X-C', major: 'Language', avatarId: 'student-avatar-4', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Perempuan' },
+  { id: '5', name: 'Eko Prasetyo', nis: '12349', class: 'XII-C', major: 'Social', avatarId: 'student-avatar-5', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki' },
+  { id: '6', name: 'Fitriani', nis: '12350', class: 'XI-B', major: 'Science', avatarId: 'student-avatar-6', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Perempuan' },
+  { id: '7', name: 'Gilang Ramadhan', nis: '12351', class: 'X-A', major: 'Social', avatarId: 'student-avatar-7', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki' },
 ];

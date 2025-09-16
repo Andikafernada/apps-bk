@@ -35,7 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { students } from "@/lib/data"
+import prisma from "@/lib/db"
 import { placeholderImages } from "@/lib/placeholder-images.json"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
@@ -43,10 +43,12 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 
-export default function StudentsPage() {
+export default async function StudentsPage() {
     const { toast } = useToast()
     const [searchTerm, setSearchTerm] = useState("")
     const [isAddStudentOpen, setAddStudentOpen] = useState(false)
+
+    const students = await prisma.student.findMany()
 
     const filteredStudents = students.filter(student =>
         student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
