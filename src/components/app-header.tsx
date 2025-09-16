@@ -1,10 +1,8 @@
 "use client"
 import Link from "next/link"
 import {
-  Bell,
   Home,
   LineChart,
-  Package2,
   PanelLeft,
   Search,
   Users2,
