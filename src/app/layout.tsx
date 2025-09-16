@@ -10,8 +10,8 @@ const ptSans = PT_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'CounselEase',
-  description: 'Aplikasi Bimbingan Konseling',
+  title: 'BK SMK Pasundan 2 Bandung',
+  description: 'Aplikasi Bimbingan Konseling SMK Pasundan 2 Bandung',
 }
 
 export default function RootLayout({

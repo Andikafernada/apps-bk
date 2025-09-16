@@ -23,10 +23,10 @@ export default function LoginPage() {
                 fill="currentColor"
               />
             </svg>
-            <h1 className="text-3xl font-bold font-headline">CounselEase</h1>
+            <h1 className="text-2xl font-bold font-headline">BK SMK Pasundan 2 Bandung</h1>
           </div>
           <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email below to login to your account</CardDescription>
+          <CardDescription>Masuk ke akun Anda untuk melanjutkan</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
@@ -38,7 +38,7 @@ export default function LoginPage() {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <Link href="#" className="ml-auto inline-block text-sm underline" prefetch={false}>
-                  Forgot your password?
+                  Lupa password?
                 </Link>
               </div>
               <Input id="password" type="password" required />

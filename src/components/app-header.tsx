@@ -69,7 +69,7 @@ export default function AppHeader() {
                   fill="currentColor"
                 />
               </svg>
-              <span className="sr-only">CounselEase</span>
+              <span className="sr-only">BK SMK Pasundan 2 Bandung</span>
             </Link>
             <Link
               href="/dashboard"
@@ -110,7 +110,7 @@ export default function AppHeader() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="#" prefetch={false}>CounselEase</Link>
+              <Link href="#" prefetch={false}>BK Pasundan 2</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
