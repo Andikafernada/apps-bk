@@ -34,7 +34,7 @@ import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { usePathname } from "next/navigation"
 import Image from "next/image"
-import { placeholderImages } from "@/lib/placeholder-images.json"
+import { placeholderImages } from "@/lib/placeholder-images"
 
 export default function AppHeader() {
   const pathname = usePathname()

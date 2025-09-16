@@ -22,7 +22,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { cases, weeklyCases } from "@/lib/data"
-import { placeholderImages } from "@/lib/placeholder-images.json"
+import { placeholderImages } from "@/lib/placeholder-images"
 
 export default function DashboardPage() {
   const chartData = weeklyCases;

@@ -1,7 +1,7 @@
 
 import { notFound } from "next/navigation"
 import { students, cases } from "@/lib/data"
-import { placeholderImages } from "@/lib/placeholder-images.json"
+import { placeholderImages } from "@/lib/placeholder-images"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"

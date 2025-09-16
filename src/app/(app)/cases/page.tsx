@@ -25,7 +25,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { placeholderImages } from "@/lib/placeholder-images.json"
+import { placeholderImages } from "@/lib/placeholder-images"
 import { Separator } from "@/components/ui/separator"
 import type { Student } from "@prisma/client"
 import { searchStudents, createCase } from "./actions"
@@ -310,5 +310,3 @@ export default function CreateCasePage() {
     </Card>
   )
 }
-
-    
