@@ -1,3 +1,4 @@
+
 "use client"
 
 import { File as FileIcon } from "lucide-react"
@@ -17,6 +18,7 @@ export default function ReportsPage() {
       description: "Your report is being generated and will download shortly.",
     })
   }
+  
   return (
     <div className="flex flex-col gap-4 md:gap-8">
       <div className="flex items-center justify-between">
@@ -54,7 +56,7 @@ export default function ReportsPage() {
           <CardHeader>
             <CardTitle>Cases by Counselor</CardTitle>
             <CardDescription>Workload distribution among counselors.</CardDescription>
-          </Header>
+          </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={350}>
               <PieChart>
