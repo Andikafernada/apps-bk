@@ -1,3 +1,5 @@
+"use client"
+
 import { File as FileIcon } from "lucide-react"
 import { Bar, BarChart, Pie, PieChart, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis, CartesianGrid } from "recharts"
 

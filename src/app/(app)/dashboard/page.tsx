@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Activity,
   ArrowUpRight,
@@ -6,7 +8,7 @@ import {
   Users,
 } from "lucide-react"
 import Link from "next/link"
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -18,14 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { cases, weeklyCases } from "@/lib/data"
 import { placeholderImages } from "@/lib/placeholder-images.json"
 
