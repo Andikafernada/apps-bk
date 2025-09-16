@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -11,45 +12,52 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(cuid())
-  name     String
-  role     String
-  avatarId String
-  cases    Case[]
+  id    String @id @default(cuid())
+  name  String
+  email String @unique
+  role  String
+
+  @@map("users")
 }
 
 model Student {
-  id          String  @id @default(cuid())
-  name        String
-  nis         String  @unique
-  class       String
-  major       String
-  avatarId    String?
-  jenjang     String
-  tahunAjaran String
-  jenisKelamin String
-  cases       Case[]
+  id            String  @id @default(cuid())
+  nis           String? @unique
+  name          String
+  class         String
+  major         String
+  avatarId      String?
+  jenjang       String
+  tahunAjaran   String
+  jenisKelamin  String
+
+  cases Case[]
+
+  @@map("students")
 }
 
 model Case {
   id        String   @id @default(cuid())
-  kode_kasus String
-  anamnesa  String   @db.Text
   studentId String
   student   Student  @relation(fields: [studentId], references: [id])
-  counselorId String
-  counselor   User     @relation(fields: [counselorId], references: [id])
-  treatments  Treatment[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  status      String   @default("Active")
+  kode_kasus String
+  anamnesa  String   @db.Text
+  status    String   @default("Active")
+  counselor String // Corresponds to id_bk
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  treatments Treatment[]
+
+  @@map("cases")
 }
 
 model Treatment {
-  id          String   @id @default(cuid())
-  caseId      String
-  case        Case     @relation(fields: [caseId], references: [id])
-  description String   @db.Text
+  id                String   @id @default(cuid())
+  caseId            String
+  case              Case     @relation(fields: [caseId], references: [id])
   tanggal_pertemuan DateTime
-  createdAt   DateTime @default(now())
+  description       String   @db.Text
+
+  @@map("treatments")
 }
