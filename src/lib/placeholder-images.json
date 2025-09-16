@@ -1,3 +1,71 @@
+
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "user-avatar-1",
+      "description": "Avatar for Dr. Ina",
+      "imageUrl": "https://picsum.photos/seed/u1/100/100",
+      "imageHint": "user avatar"
+    },
+    {
+      "id": "user-avatar-2",
+      "description": "Avatar for Mr. Budi",
+      "imageUrl": "https://picsum.photos/seed/u2/100/100",
+      "imageHint": "user avatar"
+    },
+    {
+      "id": "user-avatar-3",
+      "description": "Avatar for Mrs. Ani",
+      "imageUrl": "https://picsum.photos/seed/u3/100/100",
+      "imageHint": "user avatar"
+    },
+    {
+      "id": "user-avatar-4",
+      "description": "Avatar for Admin",
+      "imageUrl": "https://picsum.photos/seed/u4/100/100",
+      "imageHint": "user avatar"
+    },
+    {
+      "id": "student-avatar-1",
+      "description": "Avatar for Ahmad Dahlan",
+      "imageUrl": "https://picsum.photos/seed/s1/100/100",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "student-avatar-2",
+      "description": "Avatar for Budi Santoso",
+      "imageUrl": "https://picsum.photos/seed/s2/100/100",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "student-avatar-3",
+      "description": "Avatar for Citra Lestari",
+      "imageUrl": "https://picsum.photos/seed/s3/100/100",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "student-avatar-4",
+      "description": "Avatar for Dewi Anggraini",
+      "imageUrl": "https://picsum.photos/seed/s4/100/100",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "student-avatar-5",
+      "description": "Avatar for Eko Prasetyo",
+      "imageUrl": "https://picsum.photos/seed/s5/100/100",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "student-avatar-6",
+      "description": "Avatar for Fitriani",
+      "imageUrl": "https://picsum.photos/seed/s6/100/100",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "student-avatar-7",
+      "description": "Avatar for Gilang Ramadhan",
+      "imageUrl": "https://picsum.photos/seed/s7/100/100",
+      "imageHint": "student avatar"
+    }
+  ]
 }
