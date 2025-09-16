@@ -47,11 +47,10 @@ export default function StudentsPage() {
     const { toast } = useToast()
     const [searchTerm, setSearchTerm] = useState("")
     const [isAddStudentOpen, setAddStudentOpen] = useState(false)
-    const [isCreateCaseOpen, setCreateCaseOpen] = useState(false)
-    const [selectedStudentName, setSelectedStudentName] = useState("")
 
     const filteredStudents = students.filter(student =>
-        student.name.toLowerCase().includes(searchTerm.toLowerCase())
+        student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.nis.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleImport = () => {
@@ -79,7 +78,7 @@ export default function StudentsPage() {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search students..."
+                placeholder="Search students by name or NIS..."
                 className="w-full rounded-lg bg-background pl-8"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -168,10 +167,6 @@ export default function StudentsPage() {
                       <DropdownMenuItem asChild>
                         <Link href={`/students/${student.id}/edit`}>Edit</Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => {
-                          setSelectedStudentName(student.name);
-                          setCreateCaseOpen(true);
-                      }}>Create Case</DropdownMenuItem>
                       <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(student.name)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -228,30 +223,6 @@ export default function StudentsPage() {
           </div>
           <DialogFooter>
             <Button type="submit" onClick={() => setAddStudentOpen(false)}>Add Student</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      
-    <Dialog open={isCreateCaseOpen} onOpenChange={setCreateCaseOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Create New Case</DialogTitle>
-            <DialogDescription>
-              Create a new case for {selectedStudentName}.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="caseType" className="text-right">Case Type</Label>
-              <Input id="caseType" placeholder="e.g. Academic" className="col-span-3" />
-            </div>
-             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="counselor" className="text-right">Counselor</Label>
-              <Input id="counselor" placeholder="e.g. Dr. Ina" className="col-span-3" />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit" onClick={() => setCreateCaseOpen(false)}>Create Case</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
