@@ -33,7 +33,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
-  studentId: z.string(),
+  studentId: z.string().min(1, "Please select a student."),
   kode_kasus: z.string().min(1, "Case type is required."),
   anamnesa: z.string().min(1, "Anamnesa is required."),
   treatmentDescription: z.string().min(1, "First treatment description is required."),
@@ -63,18 +63,32 @@ export default function CreateCasePage() {
     e.preventDefault()
     if (!searchTerm.trim()) return
     setIsSearching(true)
-    const results = await searchStudents(searchTerm)
-    setSearchResults(results)
-    if (results.length === 1) {
-      handleSelectStudent(results[0])
+    try {
+      const results = await searchStudents(searchTerm)
+      setSearchResults(results)
+      if (results.length === 0) {
+        toast({
+            title: "No Students Found",
+            description: "There are no students matching your search term.",
+            variant: "destructive"
+        })
+      }
+    } catch (error) {
+        toast({
+            title: "Search Error",
+            description: "Failed to search for students.",
+            variant: "destructive"
+        })
+    } finally {
+        setIsSearching(false)
     }
-    setIsSearching(false)
   }
 
   const handleSelectStudent = (student: Student) => {
     setSelectedStudent(student)
     form.setValue("studentId", student.id)
     setSearchResults([])
+    setSearchTerm("")
   }
   
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -86,9 +100,10 @@ export default function CreateCasePage() {
       })
       router.push(`/cases/${newCase.id}`)
     } catch (error) {
+       console.error(error)
       toast({
-        title: "Error",
-        description: "Failed to create a new case. Please try again.",
+        title: "Error Creating Case",
+        description: "Failed to create a new case. Please check the details and try again.",
         variant: "destructive"
       })
     }
@@ -98,7 +113,13 @@ export default function CreateCasePage() {
     setSelectedStudent(null)
     setSearchTerm("")
     setSearchResults([])
-    form.reset()
+    form.reset({
+      studentId: "",
+      kode_kasus: "",
+      anamnesa: "",
+      treatmentDescription: "",
+      treatmentDate: new Date().toISOString().substring(0, 10),
+    });
   }
 
   return (
@@ -147,7 +168,7 @@ export default function CreateCasePage() {
                           <div className="flex items-center gap-4">
                             {avatar && (
                               <Avatar>
-                                <AvatarImage src={avatar.imageUrl} />
+                                <AvatarImage src={avatar.imageUrl} alt={student.name} />
                                 <AvatarFallback>
                                   {student.name.charAt(0)}
                                 </AvatarFallback>
@@ -172,122 +193,115 @@ export default function CreateCasePage() {
                 </div>
               </div>
             )}
-             {searchResults.length === 0 && searchTerm && !isSearching && (
-                 <p className="text-muted-foreground text-center mt-6">
-                    No students found matching your search.
-                </p>
-             )}
           </>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid gap-8">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-medium">Student Information</h3>
-                      <Button variant="outline" size="sm" onClick={resetSearch}>Change Student</Button>
-                  </div>
-                  <div className="flex items-center gap-4 rounded-lg border bg-muted/50 p-4">
-                    {(() => {
-                      const avatar = placeholderImages.find(p => p.id === selectedStudent.avatarId);
-                      return avatar && (
-                          <Avatar className="h-16 w-16">
-                              <AvatarImage src={avatar.imageUrl} alt={selectedStudent.name} />
-                              <AvatarFallback>{selectedStudent.name.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                      );
-                    })()}
-                    <div className="grid gap-1">
-                      <p className="font-semibold text-lg">{selectedStudent.name}</p>
-                      <p className="text-sm text-muted-foreground">NIS: {selectedStudent.nis}</p>
-                      <p className="text-sm text-muted-foreground">{selectedStudent.class} - {selectedStudent.major}</p>
-                    </div>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium">Student Information</h3>
+                    <Button variant="outline" size="sm" onClick={resetSearch}>Change Student</Button>
+                </div>
+                <div className="flex items-center gap-4 rounded-lg border bg-muted/50 p-4">
+                  {(() => {
+                    const avatar = placeholderImages.find(p => p.id === selectedStudent.avatarId);
+                    return avatar && (
+                        <Avatar className="h-16 w-16">
+                            <AvatarImage src={avatar.imageUrl} alt={selectedStudent.name} />
+                            <AvatarFallback>{selectedStudent.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                    );
+                  })()}
+                  <div className="grid gap-1">
+                    <p className="font-semibold text-lg">{selectedStudent.name}</p>
+                    <p className="text-sm text-muted-foreground">NIS: {selectedStudent.nis}</p>
+                    <p className="text-sm text-muted-foreground">{selectedStudent.class} - {selectedStudent.major}</p>
                   </div>
                 </div>
+              </div>
+              
+              <div className="space-y-4">
+                 <h3 className="text-lg font-medium">Case Details</h3>
+                 <div className="grid md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="kode_kasus"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                             <FileText className="inline-block mr-2 h-4 w-4" />
+                             Kode Kasus
+                          </FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g. Academic, Personal" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                 </div>
+
+                <FormField
+                  control={form.control}
+                  name="anamnesa"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        <ClipboardList className="inline-block mr-2 h-4 w-4" />
+                        Anamnesa
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Initial assessment and background of the case..."
+                          className="min-h-[120px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 
-                <div className="grid gap-4">
-                   <h3 className="text-lg font-medium">Case Details</h3>
-                   <div className="grid md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="kode_kasus"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>
-                               <FileText className="inline-block mr-2 h-4 w-4" />
-                               Kode Kasus
-                            </FormLabel>
-                            <FormControl>
-                              <Input placeholder="e.g. Academic, Personal" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                   </div>
-
-                  <FormField
-                    control={form.control}
-                    name="anamnesa"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          <ClipboardList className="inline-block mr-2 h-4 w-4" />
-                          Anamnesa
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Initial assessment and background of the case..."
-                            className="min-h-[120px]"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                   <div className="grid gap-2">
-                    <Label>
-                       <PlusCircle className="inline-block mr-2 h-4 w-4" />
-                       First Treatment
-                    </Label>
-                     <FormField
-                        control={form.control}
-                        name="treatmentDescription"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                               <Textarea
-                                placeholder="Describe the first treatment or counseling session..."
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                     <FormField
-                        control={form.control}
-                        name="treatmentDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                               <Input type="date" className="w-full md:w-1/3" {...field} />
-                            </FormControl>
-                             <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                  </div>
+                 <div className="space-y-2">
+                  <Label>
+                     <PlusCircle className="inline-block mr-2 h-4 w-4" />
+                     First Treatment
+                  </Label>
+                   <FormField
+                      control={form.control}
+                      name="treatmentDescription"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                             <Textarea
+                              placeholder="Describe the first treatment or counseling session..."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                   <FormField
+                      control={form.control}
+                      name="treatmentDate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                             <Input type="date" className="w-full md:w-1/3" {...field} />
+                          </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                 </div>
+              </div>
 
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" type="button" onClick={resetSearch}>Cancel</Button>
-                  <Button type="submit" disabled={form.formState.isSubmitting}>
-                    {form.formState.isSubmitting ? "Creating..." : "Create Case"}
-                  </Button>
-                </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" type="button" onClick={resetSearch}>Cancel</Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? "Creating..." : "Create Case"}
+                </Button>
               </div>
             </form>
           </Form>
@@ -296,3 +310,5 @@ export default function CreateCasePage() {
     </Card>
   )
 }
+
+    

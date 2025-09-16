@@ -3,6 +3,15 @@
 
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+const createCaseSchema = z.object({
+    studentId: z.string().min(1),
+    kode_kasus: z.string().min(1),
+    anamnesa: z.string().min(1),
+    treatmentDescription: z.string().min(1),
+    treatmentDate: z.string().min(1),
+});
 
 export async function searchStudents(searchTerm: string) {
     if (!searchTerm.trim()) {
@@ -26,20 +35,15 @@ export async function searchStudents(searchTerm: string) {
                 }
             ]
         },
-        take: 10, // Limit results for performance
+        take: 10,
     });
 
     return students;
 }
 
-export async function createCase(data: {
-    studentId: string;
-    kode_kasus: string;
-    anamnesa: string;
-    treatmentDescription: string;
-    treatmentDate: string;
-}) {
-    const { studentId, kode_kasus, anamnesa, treatmentDescription, treatmentDate } = data;
+export async function createCase(data: unknown) {
+    const validatedData = createCaseSchema.parse(data);
+    const { studentId, kode_kasus, anamnesa, treatmentDescription, treatmentDate } = validatedData;
 
     // In a real app, you'd get the counselor ID from the logged-in user's session
     const counselor = await prisma.user.findFirst();
@@ -54,6 +58,7 @@ export async function createCase(data: {
             anamnesa: anamnesa,
             status: 'Active',
             counselorId: counselor.id, // Assign to the first counselor found
+            lastMeeting: new Date(treatmentDate),
             treatments: {
                 create: {
                     tanggal_pertemuan: new Date(treatmentDate),
@@ -73,3 +78,5 @@ export async function createCase(data: {
 
     return newCase;
 }
+
+    
