@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id          String @id @default(cuid())
+  nis         String @unique
+  name        String
+  class       String
+  major       String
+  jenjang     String
+  tahunAjaran String
+  jenisKelamin String
+  avatarId    String?
+  cases       Case[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  id       String @id @default(cuid())
+  name     String
+  role     String
+  avatarId String?
+  cases    Case[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Case {
+  id            String      @id @default(cuid())
+  kode_kasus    String
+  anamnesa      String      @db.Text
+  status        String      @default("Active")
+  
+  student       Student     @relation(fields: [studentId], references: [id])
+  studentId     String
+
+  counselor     User        @relation(fields: [counselorId], references: [id])
+  counselorId   String
+
+  treatments    Treatment[]
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Treatment {
+  id                String   @id @default(cuid())
+  tanggal_pertemuan DateTime
+  description       String   @db.Text
+
+  case              Case     @relation(fields: [caseId], references: [id])
+  caseId            String
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
