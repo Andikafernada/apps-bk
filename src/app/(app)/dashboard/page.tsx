@@ -1,3 +1,4 @@
+
 "use client"
 
 import {
@@ -127,7 +128,7 @@ export default function DashboardPage() {
                     {caseItem.studentName}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {caseItem.caseType}
+                    {caseItem.kode_kasus}
                   </p>
                 </div>
                 <div className="ml-auto font-medium">

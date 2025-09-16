@@ -8,15 +8,94 @@ export const students = [
   { id: '7', name: 'Gilang Ramadhan', nis: '12351', class: 'X-A', major: 'Social', avatarId: 'student-avatar-7', jenjang: 'SMA', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki' },
 ];
 
-export const cases = [
-  { id: 'c1', studentName: 'Ahmad Dahlan', studentAvatarId: 'student-avatar-1', caseType: 'Academic', status: 'Active', counselorName: 'Dr. Ina', lastMeeting: '2024-05-10' },
-  { id: 'c2', studentName: 'Budi Santoso', studentAvatarId: 'student-avatar-2', caseType: 'Personal', status: 'Active', counselorName: 'Mr. Budi', lastMeeting: '2024-05-12' },
-  { id: 'c3', studentName: 'Citra Lestari', studentAvatarId: 'student-avatar-3', caseType: 'Career', status: 'Closed', counselorName: 'Dr. Ina', lastMeeting: '2024-04-20' },
-  { id: 'c4', studentName: 'Ahmad Dahlan', studentAvatarId: 'student-avatar-1', caseType: 'Social', status: 'Closed', counselorName: 'Mr. Budi', lastMeeting: '2024-03-15' },
-  { id: 'c5', studentName: 'Eko Prasetyo', studentAvatarId: 'student-avatar-5', caseType: 'Academic', status: 'Active', counselorName: 'Dr. Ina', lastMeeting: '2024-05-11' },
-  { id: 'c6', studentName: 'Fitriani', studentAvatarId: 'student-avatar-6', caseType: 'Personal', status: 'Active', counselorName: 'Mrs. Ani', lastMeeting: '2024-05-13' },
-  { id: 'c7', studentName: 'Dewi Anggraini', studentAvatarId: 'student-avatar-4', caseType: 'Family', status: 'Active', counselorName: 'Dr. Ina', lastMeeting: '2024-05-14' },
-  { id: 'c8', studentName: 'Gilang Ramadhan', studentAvatarId: 'student-avatar-7', caseType: 'Other', status: 'Archived', counselorName: 'Mr. Budi', lastMeeting: '2024-01-05' },
+export type Treatment = {
+  id: string;
+  tanggal_pertemuan: string;
+  description: string;
+};
+
+export type Case = {
+  id: string;
+  kode_kasus: string;
+  studentName: string;
+  studentAvatarId: string;
+  anamnesa: string;
+  treatments: Treatment[];
+  status: 'Active' | 'Closed' | 'Archived';
+  counselorName: string; // Corresponds to id_bk
+  lastMeeting: string; // Derived from the latest treatment date
+};
+
+
+export const cases: Case[] = [
+  { 
+    id: 'c1',
+    kode_kasus: 'Academic',
+    studentName: 'Ahmad Dahlan', 
+    studentAvatarId: 'student-avatar-1', 
+    anamnesa: 'Siswa mengeluhkan kesulitan fokus belajar dan sering mengantuk di kelas. Nilai beberapa mata pelajaran menurun.',
+    treatments: [
+      { id: 't1-1', tanggal_pertemuan: '2024-05-10', description: 'Sesi pertama: Mendiskusikan pola tidur dan kebiasaan belajar.'},
+    ],
+    status: 'Active', 
+    counselorName: 'Dr. Ina', 
+    lastMeeting: '2024-05-10' 
+  },
+  { 
+    id: 'c2', 
+    kode_kasus: 'Personal',
+    studentName: 'Budi Santoso', 
+    studentAvatarId: 'student-avatar-2', 
+    anamnesa: 'Siswa merasa cemas dan kurang percaya diri saat berinteraksi dengan teman-temannya. Cenderung menyendiri.',
+    treatments: [
+      { id: 't2-1', tanggal_pertemuan: '2024-05-01', description: 'Identifikasi pemicu kecemasan sosial.'},
+      { id: 't2-2', tanggal_pertemuan: '2024-05-12', description: 'Latihan teknik relaksasi dan role playing interaksi sosial.'},
+    ],
+    status: 'Active', 
+    counselorName: 'Mr. Budi', 
+    lastMeeting: '2024-05-12' 
+  },
+  { 
+    id: 'c3',
+    kode_kasus: 'Career',
+    studentName: 'Citra Lestari', 
+    studentAvatarId: 'student-avatar-3', 
+    anamnesa: 'Siswa bingung dalam menentukan pilihan jurusan untuk melanjutkan ke perguruan tinggi. Belum ada gambaran karir masa depan.',
+    treatments: [
+      { id: 't3-1', tanggal_pertemuan: '2024-04-10', description: 'Tes minat dan bakat.'},
+      { id: 't3-2', tanggal_pertemuan: '2024-04-20', description: 'Diskusi hasil tes dan eksplorasi berbagai pilihan karir dan jurusan.'},
+    ],
+    status: 'Closed', 
+    counselorName: 'Dr. Ina', 
+    lastMeeting: '2024-04-20' 
+  },
+  { 
+    id: 'c4', 
+    kode_kasus: 'Social',
+    studentName: 'Ahmad Dahlan', 
+    studentAvatarId: 'student-avatar-1', 
+    anamnesa: 'Terlibat konflik dengan teman sekelas. Merasa dikucilkan.',
+    treatments: [
+      { id: 't4-1', tanggal_pertemuan: '2024-03-08', description: 'Mediator konflik antara siswa dan temannya.'},
+      { id: 't4-2', tanggal_pertemuan: '2024-03-15', description: 'Sesi konseling kelompok untuk membangun kembali hubungan sosial.'},
+    ],
+    status: 'Closed', 
+    counselorName: 'Mr. Budi', 
+    lastMeeting: '2024-03-15' 
+  },
+  { 
+    id: 'c5', 
+    kode_kasus: 'Academic',
+    studentName: 'Eko Prasetyo', 
+    studentAvatarId: 'student-avatar-5', 
+    anamnesa: 'Siswa menunjukkan gejala prokrastinasi dalam mengerjakan tugas-tugas sekolah.',
+    treatments: [
+      { id: 't5-1', tanggal_pertemuan: '2024-05-11', description: 'Menerapkan teknik manajemen waktu dan pembuatan jadwal.'},
+    ],
+    status: 'Active', 
+    counselorName: 'Dr. Ina', 
+    lastMeeting: '2024-05-11' 
+  },
 ];
 
 export const users = [

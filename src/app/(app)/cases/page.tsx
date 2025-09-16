@@ -67,7 +67,6 @@ export default function CasesPage() {
     closed: true,
     archived: false,
   })
-  const [isAddCaseOpen, setAddCaseOpen] = useState(false)
   const [isAddTreatmentOpen, setAddTreatmentOpen] = useState(false)
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null)
 
@@ -148,12 +147,6 @@ export default function CasesPage() {
                 Export
               </span>
             </Button>
-            <Button size="sm" className="h-8 gap-1" onClick={() => setAddCaseOpen(true)}>
-              <PlusCircle className="h-3.5 w-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Add Case
-              </span>
-            </Button>
           </div>
         </div>
         <TabsContent value={activeTab}>
@@ -185,7 +178,7 @@ export default function CasesPage() {
                         {caseItem.studentName}
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline">{caseItem.caseType}</Badge>
+                        <Badge variant="outline">{caseItem.kode_kasus}</Badge>
                       </TableCell>
                       <TableCell>
                         <Badge variant={caseItem.status === 'Active' ? 'secondary' : caseItem.status === 'Closed' ? 'outline' : 'default'}>
@@ -240,39 +233,7 @@ export default function CasesPage() {
           </Card>
         </TabsContent>
       </Tabs>
-      <Dialog open={isAddCaseOpen} onOpenChange={setAddCaseOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Case</DialogTitle>
-            <DialogDescription>
-              Fill in the details to create a new student case.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="studentName" className="text-right">
-                Student Name
-              </Label>
-              <Input id="studentName" placeholder="e.g. John Doe" className="col-span-3" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="caseType" className="text-right">
-                Case Type
-              </Label>
-              <Input id="caseType" placeholder="e.g. Academic" className="col-span-3" />
-            </div>
-             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="counselor" className="text-right">
-                Counselor
-              </Label>
-              <Input id="counselor" placeholder="e.g. Dr. Ina" className="col-span-3" />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit" onClick={() => setAddCaseOpen(false)}>Create Case</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      
       <Dialog open={isAddTreatmentOpen} onOpenChange={setAddTreatmentOpen}>
         <DialogContent>
           <DialogHeader>
@@ -283,10 +244,16 @@ export default function CasesPage() {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="treatment-date" className="text-right">
+                Date
+              </Label>
+              <Input id="treatment-date" type="date" className="col-span-3" defaultValue={new Date().toISOString().substring(0, 10)} />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="treatment" className="text-right">
                 Treatment
               </Label>
-              <Textarea id="treatment" placeholder="Describe the treatment" className="col-span-3" />
+              <Textarea id="treatment" placeholder="Describe the treatment provided in the meeting..." className="col-span-3" />
             </div>
           </div>
           <DialogFooter>

@@ -63,7 +63,7 @@ export default function StudentDetailsPage({ params }: { params: { id: string } 
                           <TableRow key={caseItem.id}>
                             <TableCell>
                                 <Link href={`/cases/${caseItem.id}`} className="font-medium hover:underline">
-                                    {caseItem.caseType}
+                                    {caseItem.kode_kasus}
                                 </Link>
                             </TableCell>
                             <TableCell>
