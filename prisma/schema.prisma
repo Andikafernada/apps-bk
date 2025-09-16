@@ -1,9 +1,8 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  binaryTargets   = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -12,53 +11,58 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  name      String?
-  email     String?   @unique
+  id        String   @id @default(cuid())
+  name      String
+  email     String?  @unique
+  role      String // e.g., 'guru_bk', 'admin'
   avatarId  String?
-  role      String
   cases     Case[]
+  treatments Treatment[]
+
+  @@map("users")
 }
 
 model Student {
   id            String  @id @default(cuid())
   nis           String? @unique
   name          String
-  class         String
-  major         String
+  class         String?
+  major         String?
   avatarId      String?
-  jenjang       String
-  tahunAjaran   String
-  jenisKelamin  String
+  jenjang       String?
+  tahunAjaran   String?
+  jenisKelamin  String?
   cases         Case[]
+
+  @@map("students")
 }
 
 model Case {
-  id            String    @id @default(cuid())
-  kode_kasus    String
-  anamnesa      String    @db.Text
-  status        String    // e.g., 'Active', 'Closed', 'Archived'
-  lastMeeting   DateTime
-  
-  studentId     String
-  student       Student   @relation(fields: [studentId], references: [id])
-  
-  counselorId   String
-  counselor     User      @relation(fields: [counselorId], references: [id])
-  
-  treatments    Treatment[]
+  id          String      @id @default(cuid())
+  kode_kasus  String
+  anamnesa    String      @db.Text
+  status      String      // 'Active', 'Closed', 'Archived'
+  studentId   String
+  student     Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  counselorId String
+  counselor   User        @relation(fields: [counselorId], references: [id])
+  treatments  Treatment[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  @@map("cases")
 }
 
 model Treatment {
   id                String   @id @default(cuid())
   tanggal_pertemuan DateTime
   description       String   @db.Text
-  
   caseId            String
-  case              Case     @relation(fields: [caseId], references: [id])
-
+  case              Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  counselorId       String
+  counselor         User     @relation(fields: [counselorId], references: [id])
   createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("treatments")
 }
