@@ -114,14 +114,13 @@ export default function StudentsPage() {
               <TableHead className="hidden w-[100px] sm:table-cell">
                 <span className="sr-only">Image</span>
               </TableHead>
-              <TableHead>Name</TableHead>
               <TableHead>NIS</TableHead>
-              <TableHead className="hidden md:table-cell">
-                Class
-              </TableHead>
-              <TableHead className="hidden md:table-cell">
-                Major
-              </TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Class</TableHead>
+              <TableHead>Major</TableHead>
+              <TableHead className="hidden md:table-cell">Jenjang</TableHead>
+              <TableHead className="hidden md:table-cell">Tahun Ajaran</TableHead>
+              <TableHead className="hidden md:table-cell">Jenis Kelamin</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
               </TableHead>
@@ -144,14 +143,15 @@ export default function StudentsPage() {
                     />
                   )}
                 </TableCell>
-                <TableCell className="font-medium">{student.name}</TableCell>
                 <TableCell>{student.nis}</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {student.class}
-                </TableCell>
+                <TableCell className="font-medium">{student.name}</TableCell>
+                <TableCell>{student.class}</TableCell>
                 <TableCell className="hidden md:table-cell">
                   <Badge variant="outline">{student.major}</Badge>
                 </TableCell>
+                <TableCell className="hidden md:table-cell">{student.jenjang}</TableCell>
+                <TableCell className="hidden md:table-cell">{student.tahunAjaran}</TableCell>
+                <TableCell className="hidden md:table-cell">{student.jenisKelamin}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -198,12 +198,12 @@ export default function StudentsPage() {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">Name</Label>
-              <Input id="name" placeholder="e.g. Jane Doe" className="col-span-3" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="nis" className="text-right">NIS</Label>
               <Input id="nis" placeholder="e.g. 12399" className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">Name</Label>
+              <Input id="name" placeholder="e.g. Jane Doe" className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="class" className="text-right">Class</Label>
@@ -212,6 +212,18 @@ export default function StudentsPage() {
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="major" className="text-right">Major</Label>
               <Input id="major" placeholder="e.g. Science" className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="jenjang" className="text-right">Jenjang</Label>
+              <Input id="jenjang" placeholder="e.g. SMA" className="col-span-3" />
+            </div>
+             <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="tahunAjaran" className="text-right">Tahun Ajaran</Label>
+              <Input id="tahunAjaran" placeholder="e.g. 2023/2024" className="col-span-3" />
+            </div>
+             <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="jenisKelamin" className="text-right">Jenis Kelamin</Label>
+              <Input id="jenisKelamin" placeholder="e.g. Perempuan" className="col-span-3" />
             </div>
           </div>
           <DialogFooter>

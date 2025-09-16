@@ -34,7 +34,11 @@ export default function StudentDetailsPage({ params }: { params: { id: string } 
                     )}
                     <div>
                         <CardTitle>{student.name}</CardTitle>
-                        <CardDescription>NIS: {student.nis} | {student.class} - {student.major}</CardDescription>
+                        <CardDescription>
+                            NIS: {student.nis} | {student.class} - {student.major}
+                            <br />
+                            {student.jenjang} | {student.tahunAjaran} | {student.jenisKelamin}
+                        </CardDescription>
                     </div>
                 </div>
             </CardHeader>

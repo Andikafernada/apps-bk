@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { useState } from "react"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 export default function StudentEditPage({ params }: { params: { id: string } }) {
   const router = useRouter()
@@ -19,6 +20,9 @@ export default function StudentEditPage({ params }: { params: { id: string } }) 
       nis: student?.nis || '',
       class: student?.class || '',
       major: student?.major || '',
+      jenjang: student?.jenjang || '',
+      tahunAjaran: student?.tahunAjaran || '',
+      jenisKelamin: student?.jenisKelamin || '',
   })
 
   if (!student) {
@@ -39,6 +43,10 @@ export default function StudentEditPage({ params }: { params: { id: string } }) 
       setFormData(prev => ({...prev, [id]: value}))
   }
 
+  const handleRadioChange = (value: string) => {
+    setFormData(prev => ({...prev, jenisKelamin: value}))
+  }
+
   return (
     <div className="grid gap-6">
         <Card>
@@ -49,12 +57,12 @@ export default function StudentEditPage({ params }: { params: { id: string } }) 
             <CardContent>
                 <form onSubmit={handleSave} className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Input id="name" value={formData.name} onChange={handleChange} />
-                    </div>
-                     <div className="grid gap-2">
                         <Label htmlFor="nis">NIS</Label>
                         <Input id="nis" value={formData.nis} onChange={handleChange} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input id="name" value={formData.name} onChange={handleChange} />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
@@ -65,6 +73,29 @@ export default function StudentEditPage({ params }: { params: { id: string } }) 
                             <Label htmlFor="major">Major</Label>
                             <Input id="major" value={formData.major} onChange={handleChange} />
                         </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                         <div className="grid gap-2">
+                            <Label htmlFor="jenjang">Jenjang</Label>
+                            <Input id="jenjang" value={formData.jenjang} onChange={handleChange} />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="tahunAjaran">Tahun Ajaran</Label>
+                            <Input id="tahunAjaran" value={formData.tahunAjaran} onChange={handleChange} />
+                        </div>
+                    </div>
+                     <div className="grid gap-2">
+                        <Label>Jenis Kelamin</Label>
+                        <RadioGroup defaultValue={formData.jenisKelamin} onValueChange={handleRadioChange} className="flex gap-4">
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="Laki-laki" id="male" />
+                                <Label htmlFor="male">Laki-laki</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="Perempuan" id="female" />
+                                <Label htmlFor="female">Perempuan</Label>
+                            </div>
+                        </RadioGroup>
                     </div>
                     <div className="flex gap-2">
                         <Button type="submit">Save Changes</Button>
