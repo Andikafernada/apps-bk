@@ -64,7 +64,7 @@ export default function CasesPage() {
   const [activeTab, setActiveTab] = useState<Status>("all")
   const [filters, setFilters] = useState({
     active: true,
-    closed: false,
+    closed: true,
     archived: false,
   })
   const [isAddCaseOpen, setAddCaseOpen] = useState(false)
@@ -80,7 +80,7 @@ export default function CasesPage() {
       return false
     }
     const status = caseItem.status.toLowerCase() as keyof typeof filters
-    return filters[status] || Object.values(filters).every(f => !f);
+    return filters[status];
   })
 
   const exportCases = () => {
@@ -94,7 +94,6 @@ export default function CasesPage() {
     toast({
       title: "Case Archived",
       description: `Case with ID ${caseId} has been archived.`,
-      variant: "destructive"
     })
   }
 
@@ -121,7 +120,7 @@ export default function CasesPage() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+                <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuCheckboxItem
                   checked={filters.active}
@@ -189,7 +188,7 @@ export default function CasesPage() {
                         <Badge variant="outline">{caseItem.caseType}</Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={caseItem.status === 'Active' ? 'secondary' : 'default'}>
+                        <Badge variant={caseItem.status === 'Active' ? 'secondary' : caseItem.status === 'Closed' ? 'outline' : 'default'}>
                           {caseItem.status}
                         </Badge>
                       </TableCell>
@@ -223,7 +222,7 @@ export default function CasesPage() {
                                 Add Treatment
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-destructive" onClick={() => archiveCase(caseItem.id)}>Archive Case</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => archiveCase(caseItem.id)}>Archive Case</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>

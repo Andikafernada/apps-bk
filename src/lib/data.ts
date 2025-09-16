@@ -15,6 +15,8 @@ export const cases = [
   { id: 'c4', studentName: 'Ahmad Dahlan', studentAvatarId: 'student-avatar-1', caseType: 'Social', status: 'Closed', counselorName: 'Mr. Budi', lastMeeting: '2024-03-15' },
   { id: 'c5', studentName: 'Eko Prasetyo', studentAvatarId: 'student-avatar-5', caseType: 'Academic', status: 'Active', counselorName: 'Dr. Ina', lastMeeting: '2024-05-11' },
   { id: 'c6', studentName: 'Fitriani', studentAvatarId: 'student-avatar-6', caseType: 'Personal', status: 'Active', counselorName: 'Mrs. Ani', lastMeeting: '2024-05-13' },
+  { id: 'c7', studentName: 'Dewi Anggraini', studentAvatarId: 'student-avatar-4', caseType: 'Family', status: 'Active', counselorName: 'Dr. Ina', lastMeeting: '2024-05-14' },
+  { id: 'c8', studentName: 'Gilang Ramadhan', studentAvatarId: 'student-avatar-7', caseType: 'Other', status: 'Archived', counselorName: 'Mr. Budi', lastMeeting: '2024-01-05' },
 ];
 
 export const users = [
@@ -40,6 +42,7 @@ export const casesByType = [
   { type: 'Career', count: 60 },
   { type: 'Social', count: 95 },
   { type: 'Family', count: 40 },
+  { type: 'Other', count: 20 },
 ];
 
 export const casesByCounselor = [
