@@ -12,12 +12,12 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(cuid())
-  name  String
-  email String @unique
-  role  String
-
-  @@map("users")
+  id        String    @id @default(cuid())
+  name      String?
+  email     String?   @unique
+  avatarId  String?
+  role      String
+  cases     Case[]
 }
 
 model Student {
@@ -30,34 +30,35 @@ model Student {
   jenjang       String
   tahunAjaran   String
   jenisKelamin  String
-
-  cases Case[]
-
-  @@map("students")
+  cases         Case[]
 }
 
 model Case {
-  id        String   @id @default(cuid())
-  studentId String
-  student   Student  @relation(fields: [studentId], references: [id])
-  kode_kasus String
-  anamnesa  String   @db.Text
-  status    String   @default("Active")
-  counselor String // Corresponds to id_bk
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String    @id @default(cuid())
+  kode_kasus    String
+  anamnesa      String    @db.Text
+  status        String    // e.g., 'Active', 'Closed', 'Archived'
+  lastMeeting   DateTime
+  
+  studentId     String
+  student       Student   @relation(fields: [studentId], references: [id])
+  
+  counselorId   String
+  counselor     User      @relation(fields: [counselorId], references: [id])
+  
+  treatments    Treatment[]
 
-  treatments Treatment[]
-
-  @@map("cases")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Treatment {
   id                String   @id @default(cuid())
-  caseId            String
-  case              Case     @relation(fields: [caseId], references: [id])
   tanggal_pertemuan DateTime
   description       String   @db.Text
+  
+  caseId            String
+  case              Case     @relation(fields: [caseId], references: [id])
 
-  @@map("treatments")
+  createdAt         DateTime @default(now())
 }
