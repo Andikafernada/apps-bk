@@ -1,3 +1,4 @@
+
 "use client"
 import Link from "next/link"
 import {
@@ -7,6 +8,9 @@ import {
   Search,
   Users2,
   FolderKanban,
+  LogOut,
+  LifeBuoy,
+  Settings,
 } from "lucide-react"
 
 import {
@@ -34,8 +38,9 @@ import { placeholderImages } from "@/lib/placeholder-images.json"
 
 export default function AppHeader() {
   const pathname = usePathname()
-  const pageName = pathname.split("/").pop()
-  const capitalizedPageName = pageName ? pageName.charAt(0).toUpperCase() + pageName.slice(1) : "Dashboard"
+  const pageName = pathname.split("/").filter(Boolean).pop() ?? "dashboard";
+  const capitalizedPageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -110,7 +115,7 @@ export default function AppHeader() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{capitalizedPageName}</BreadcrumbPage>
+            <BreadcrumbPage>{capitalizedPageName.split('?')[0]}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -142,11 +147,15 @@ export default function AppHeader() {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/support"><LifeBuoy className="mr-2 h-4 w-4" />Support</Link>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href="/" prefetch={false}>Logout</Link>
+            <Link href="/"><LogOut className="mr-2 h-4 w-4" />Logout</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
