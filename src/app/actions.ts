@@ -3,7 +3,7 @@
  
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/db';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import { createSession, deleteSession } from '@/lib/session';
  
 export async function authenticate(
