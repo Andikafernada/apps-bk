@@ -8,8 +8,9 @@ async function main() {
   console.log(`Start seeding ...`)
 
   // Delete all existing data to start fresh
-  await prisma.case.deleteMany();
+  // The order is important to avoid foreign key constraint errors
   await prisma.treatment.deleteMany();
+  await prisma.case.deleteMany();
   await prisma.student.deleteMany();
   await prisma.user.deleteMany();
   
