@@ -2,11 +2,15 @@
 "use client"
 
 import { File as FileIcon } from "lucide-react"
-import { Bar, BarChart, Pie, PieChart, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis, CartesianGrid } from "recharts"
+import { Bar, BarChart, Pie, PieChart, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis, CartesianGrid, Cell } from "recharts"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
+
+// This page must be a client component because it uses hooks (useToast)
+// and Recharts which is a client-side library.
+// In a real app, you would fetch the data via a server action or API route.
 
 export default function ReportsPage() {
   const { toast } = useToast()
@@ -18,10 +22,13 @@ export default function ReportsPage() {
     })
   }
 
-  // Data is now fetched from the database, so we'll show an empty state for now.
+  // Data fetching would happen here, e.g., in a useEffect hook calling a server action.
+  // For now, we'll continue with empty/placeholder data.
   const casesByType: any[] = [];
   const casesByCounselor: any[] = [];
   
+  const COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))", "hsl(var(--chart-4))", "hsl(var(--chart-5))"];
+
   return (
     <div className="flex flex-col gap-4 md:gap-8">
       <div className="flex items-center justify-between">
@@ -50,7 +57,7 @@ export default function ReportsPage() {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="type" stroke="hsl(var(--foreground))" fontSize={12} tickLine={false} axisLine={false} />
                   <YAxis stroke="hsl(var(--foreground))" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
-                  <Tooltip wrapperClassName="!bg-background !border-border" />
+                  <Tooltip wrapperClassName="!bg-background !border-border" contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }}/>
                   <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -65,7 +72,7 @@ export default function ReportsPage() {
           <CardHeader>
             <CardTitle>Cases by Counselor</CardTitle>
             <CardDescription>Workload distribution among counselors.</CardDescription>
-          </CardHeader>
+          </Header>
           <CardContent>
             {casesByCounselor.length > 0 ? (
             <ResponsiveContainer width="100%" height={350}>
@@ -79,8 +86,12 @@ export default function ReportsPage() {
                   outerRadius={120}
                   fill="hsl(var(--primary))"
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                />
-                <Tooltip wrapperClassName="!bg-background !border-border" />
+                >
+                    {casesByCounselor.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                </Pie>
+                <Tooltip wrapperClassName="!bg-background !border-border" contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>

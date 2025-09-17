@@ -7,7 +7,6 @@ import {
   Users,
 } from "lucide-react"
 import Link from "next/link"
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -21,6 +20,8 @@ import {
 } from "@/components/ui/card"
 import prisma from "@/lib/db"
 import { placeholderImages } from "@/lib/placeholder-images"
+import WeeklyCasesChart from "./weekly-cases-chart"
+import { subDays, format } from "date-fns"
 
 export default async function DashboardPage() {
   const totalStudents = await prisma.student.count();
@@ -31,8 +32,36 @@ export default async function DashboardPage() {
     include: { student: true }
   });
 
-  const chartData: any[] = []; // Data dummy dikosongkan
+  const sevenDaysAgo = subDays(new Date(), 7);
+  const weeklyCasesData = await prisma.case.groupBy({
+    by: ['createdAt'],
+    where: {
+      createdAt: {
+        gte: sevenDaysAgo,
+      },
+    },
+    _count: {
+      id: true,
+    },
+    orderBy: {
+      createdAt: 'asc',
+    },
+  });
 
+  // Format data for the chart
+  const chartData = Array.from({ length: 7 }).map((_, i) => {
+    const date = subDays(new Date(), 6 - i);
+    const day = format(date, 'EEE'); // e.g., 'Mon'
+    const formattedDate = format(date, 'yyyy-MM-dd');
+    
+    const dayData = weeklyCasesData.find(d => format(new Date(d.createdAt), 'yyyy-MM-dd') === formattedDate);
+    
+    return {
+      day,
+      cases: dayData ? dayData._count.id : 0,
+    };
+  });
+  
   return (
     <div className="flex flex-1 flex-col gap-4 md:gap-8">
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
@@ -96,22 +125,7 @@ export default async function DashboardPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {chartData.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="day" />
-                      <YAxis />
-                      <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }}/>
-                      <Legend />
-                      <Bar dataKey="cases" fill="hsl(var(--primary))" name="New Cases" />
-                  </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="flex h-[300px] items-center justify-center">
-                <p className="text-muted-foreground">Weekly report data is not available yet.</p>
-              </div>
-            )}
+            <WeeklyCasesChart data={chartData} />
           </CardContent>
         </Card>
         <Card>
