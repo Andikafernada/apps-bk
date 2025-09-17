@@ -1,0 +1,37 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name domain_atau_ip_server_anda;
+
+    root /var/www/html;
+    index index.php index.html index.htm;
+
+    # Blok spesifik untuk PHPMyAdmin
+    # Ini harus ada SEBELUM blok "location /"
+    location /phpmyadmin {
+        index index.php;
+        try_files $uri $uri/ =404;
+
+        location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+            # Sesuaikan path soket jika versi PHP Anda berbeda (misalnya, php8.2-fpm.sock)
+            fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
+    }
+
+    # Blok "catch-all" untuk aplikasi Next.js
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
