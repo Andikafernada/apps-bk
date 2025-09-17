@@ -23,8 +23,10 @@ async function main() {
   const hashedPassword = await bcrypt.hash(defaultPassword, 10);
 
   for (const u of users) {
-    const user = await prisma.user.create({
-      data: {
+    const user = await prisma.user.upsert({
+      where: { email: u.email },
+      update: {},
+      create: {
         name: u.name,
         email: u.email,
         role: u.role,
@@ -32,7 +34,7 @@ async function main() {
         avatarId: `user-avatar-${Math.floor(Math.random() * 4) + 1}`
       },
     })
-    console.log(`Created user with id: ${user.id}`)
+    console.log(`Upserted user with id: ${user.id}`)
   }
 
   // Seeding students
@@ -45,10 +47,12 @@ async function main() {
   ];
 
   for (const s of students) {
-    const student = await prisma.student.create({
-      data: s,
+    const student = await prisma.student.upsert({
+      where: { nis: s.nis },
+      update: {},
+      create: s,
     });
-    console.log(`Created student with id: ${student.id}`);
+    console.log(`Upserted student with id: ${student.id}`);
   }
 
   console.log(`Seeding finished.`)
