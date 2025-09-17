@@ -1,13 +1,13 @@
 
 import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 async function main() {
   console.log(`Start seeding ...`)
 
-  // Delete all existing data
+  // Delete all existing data to start fresh
   await prisma.case.deleteMany();
   await prisma.treatment.deleteMany();
   await prisma.student.deleteMany();
