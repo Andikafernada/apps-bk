@@ -25,7 +25,7 @@ export async function authenticate(
  
     if (passwordsMatch) {
        await createSession(user.id);
-       return redirect('/dashboard');
+       redirect('/dashboard');
     } else {
         return 'Invalid email or password.';
     }
