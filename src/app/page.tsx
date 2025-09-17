@@ -1,12 +1,28 @@
-import Link from "next/link";
-import { HardDriveIcon, Users } from "lucide-react";
 
+"use client";
+
+import Link from "next/link";
+import { useFormState, useFormStatus } from "react-dom";
+import { authenticate } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
+
+function LoginButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" className="w-full" aria-disabled={pending}>
+      {pending ? "Logging in..." : "Login"}
+    </Button>
+  );
+}
 
 export default function LoginPage() {
+  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-background p-4">
       <Card className="mx-auto w-full max-w-sm">
@@ -29,10 +45,10 @@ export default function LoginPage() {
           <CardDescription>Masuk ke akun Anda untuk melanjutkan</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
+          <form action={dispatch} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="m@example.com" required />
+              <Input id="email" name="email" type="email" placeholder="m@example.com" required />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -41,12 +57,17 @@ export default function LoginPage() {
                   Lupa password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" name="password" type="password" required />
             </div>
-            <Button type="submit" className="w-full" asChild>
-              <Link href="/dashboard">Login</Link>
-            </Button>
-          </div>
+            <LoginButton />
+             {errorMessage && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Login Failed</AlertTitle>
+                <AlertDescription>{errorMessage}</AlertDescription>
+              </Alert>
+            )}
+          </form>
         </CardContent>
       </Card>
     </div>
