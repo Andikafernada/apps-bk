@@ -25,6 +25,7 @@ export async function authenticate(
     if (passwordsMatch) {
        // In a real app, you'd create a session here.
        // For now, we'll just redirect.
+       redirect('/dashboard');
     } else {
         return 'Invalid email or password.';
     }
@@ -33,8 +34,11 @@ export async function authenticate(
       if (error.message.includes('CredentialsSignin')) {
         return 'Invalid email or password.';
       }
+      // This will catch the REDIRECT error and is expected
+      if (error.message.includes('NEXT_REDIRECT')) {
+        throw error;
+      }
     }
-    return 'An unexpected error occurred.';
+    return 'An unexpected error occurred. Please try again.';
   }
-  redirect('/dashboard');
 }
