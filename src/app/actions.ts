@@ -4,6 +4,7 @@
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { createSession, deleteSession } from '@/lib/session';
  
 export async function authenticate(
   prevState: string | undefined,
@@ -23,22 +24,26 @@ export async function authenticate(
     const passwordsMatch = await bcrypt.compare(password.toString(), user.password);
  
     if (passwordsMatch) {
-       // In a real app, you'd create a session here.
-       // For now, we'll just redirect.
+       await createSession(user.id);
        redirect('/dashboard');
     } else {
         return 'Invalid email or password.';
     }
   } catch (error) {
     if (error instanceof Error) {
-      if (error.message.includes('CredentialsSignin')) {
-        return 'Invalid email or password.';
-      }
       // This will catch the REDIRECT error and is expected
       if (error.message.includes('NEXT_REDIRECT')) {
         throw error;
       }
+      if (error.message.includes('CredentialsSignin')) {
+        return 'Invalid email or password.';
+      }
     }
     return 'An unexpected error occurred. Please try again.';
   }
+}
+
+export async function logout() {
+  await deleteSession();
+  redirect('/');
 }

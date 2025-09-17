@@ -35,11 +35,19 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { usePathname } from "next/navigation"
 import Image from "next/image"
 import { placeholderImages } from "@/lib/placeholder-images"
+import { logout } from "@/app/actions"
 
-export default function AppHeader() {
+type User = {
+  name: string | null;
+  email: string | null;
+  avatarId: string | null;
+}
+
+export default function AppHeader({ user }: { user: User }) {
   const pathname = usePathname()
   const pageName = pathname.split("/").filter(Boolean).pop() ?? "dashboard";
   const capitalizedPageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+  const userAvatar = placeholderImages.find(p => p.id === user.avatarId) ?? placeholderImages.find(p => p.id === 'user-avatar-1');
 
 
   return (
@@ -135,7 +143,7 @@ export default function AppHeader() {
             className="overflow-hidden rounded-full"
           >
             <Image
-              src={placeholderImages.find(p => p.id === 'user-avatar-1')?.imageUrl || "/placeholder-user.jpg"}
+              src={userAvatar?.imageUrl || "/placeholder-user.jpg"}
               width={36}
               height={36}
               alt="Avatar"
@@ -145,7 +153,14 @@ export default function AppHeader() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium leading-none">{user.name}</p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user.email}
+              </p>
+            </div>
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
@@ -154,9 +169,14 @@ export default function AppHeader() {
             <Link href="/support"><LifeBuoy className="mr-2 h-4 w-4" />Support</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <Link href="/"><LogOut className="mr-2 h-4 w-4" />Logout</Link>
-          </DropdownMenuItem>
+          <form action={logout}>
+            <DropdownMenuItem asChild>
+                <button type="submit" className="w-full">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                </button>
+            </DropdownMenuItem>
+          </form>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
