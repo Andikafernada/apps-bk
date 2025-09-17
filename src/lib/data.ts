@@ -1,4 +1,9 @@
 
+// This file is no longer needed as we are fetching data from a real database.
+// It can be deleted, but we will leave it for now to avoid breaking any imports
+// that might still exist. We are replacing its content with empty exports
+// to ensure that any code still importing from it does not crash.
+
 export type Treatment = {
   id: string;
   tanggal_pertemuan: string;

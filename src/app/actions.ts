@@ -2,10 +2,8 @@
 'use server';
  
 import { redirect } from 'next/navigation';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/db';
 import bcrypt from 'bcryptjs';
- 
-const prisma = new PrismaClient();
  
 export async function authenticate(
   prevState: string | undefined,
@@ -31,7 +29,11 @@ export async function authenticate(
         return 'Invalid email or password.';
     }
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) {
+      if (error.message.includes('CredentialsSignin')) {
+        return 'Invalid email or password.';
+      }
+    }
     return 'An unexpected error occurred.';
   }
   redirect('/dashboard');
