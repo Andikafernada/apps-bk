@@ -29,10 +29,26 @@ async function main() {
         email: u.email,
         role: u.role,
         password: hashedPassword,
-        avatarId: `user-avatar-${Math.floor(Math.random() * 4) + 1}` // Assign a random avatar
+        avatarId: `user-avatar-${Math.floor(Math.random() * 4) + 1}`
       },
     })
     console.log(`Created user with id: ${user.id}`)
+  }
+
+  // Seeding students
+  const students = [
+    { nis: '11111', name: 'Ahmad Dahlan', class: 'XII-A', major: 'Teknik Komputer', jenjang: 'SMK', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki', avatarId: 'student-avatar-1' },
+    { nis: '11112', name: 'Budi Santoso', class: 'XII-B', major: 'Akuntansi', jenjang: 'SMK', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki', avatarId: 'student-avatar-2' },
+    { nis: '11113', name: 'Citra Lestari', class: 'XI-A', major: 'Teknik Mesin', jenjang: 'SMK', tahunAjaran: '2023/2024', jenisKelamin: 'Perempuan', avatarId: 'student-avatar-3' },
+    { nis: '11114', name: 'Dewi Anggraini', class: 'X-C', major: 'Multimedia', jenjang: 'SMK', tahunAjaran: '2023/2024', jenisKelamin: 'Perempuan', avatarId: 'student-avatar-4' },
+    { nis: '11115', name: 'Eko Prasetyo', class: 'XII-C', major: 'Otomotif', jenjang: 'SMK', tahunAjaran: '2023/2024', jenisKelamin: 'Laki-laki', avatarId: 'student-avatar-5' }
+  ];
+
+  for (const s of students) {
+    const student = await prisma.student.create({
+      data: s,
+    });
+    console.log(`Created student with id: ${student.id}`);
   }
 
   console.log(`Seeding finished.`)

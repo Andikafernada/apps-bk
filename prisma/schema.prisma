@@ -12,15 +12,15 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String
-  role      String // e.g., 'guru_bk'
-  avatarId  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  cases     Case[]   @relation("CounselorToCase")
+  id         String      @id @default(cuid())
+  name       String
+  email      String      @unique
+  password   String
+  role       String
+  avatarId   String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  cases      Case[]      @relation("CounselorToCase")
   treatments Treatment[] @relation("CounselorToTreatment")
 }
 
@@ -32,36 +32,36 @@ model Student {
   major        String
   jenjang      String
   tahunAjaran  String
-  jenisKelamin String // "Laki-laki" or "Perempuan"
+  jenisKelamin String
   avatarId     String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  cases        Case[]   @relation("StudentToCase")
+  cases        Case[]
 }
 
 model Case {
-  id           String      @id @default(cuid())
-  studentId    String
-  student      Student     @relation("StudentToCase", fields: [studentId], references: [id])
-  counselorId  String
-  counselor    User        @relation("CounselorToCase", fields: [counselorId], references: [id])
-  kode_kasus   String
-  anamnesa     String      @db.Text
-  status       String // "Active", "Closed", "Archived"
-  lastMeeting  DateTime
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  treatments   Treatment[]
+  id          String     @id @default(cuid())
+  student     Student    @relation(fields: [studentId], references: [id])
+  studentId   String
+  counselor   User       @relation("CounselorToCase", fields: [counselorId], references: [id])
+  counselorId String
+  kode_kasus  String
+  anamnesa    String     @db.Text
+  status      String
+  lastMeeting DateTime
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  treatments  Treatment[]
 }
 
 model Treatment {
-  id                 String   @id @default(cuid())
-  caseId             String
-  case               Case     @relation(fields: [caseId], references: [id])
-  counselorId        String
-  counselor          User     @relation("CounselorToTreatment", fields: [counselorId], references: [id])
-  tanggal_pertemuan  DateTime
-  description        String   @db.Text
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                String   @id @default(cuid())
+  case              Case     @relation(fields: [caseId], references: [id])
+  caseId            String
+  counselor         User     @relation("CounselorToTreatment", fields: [counselorId], references: [id])
+  counselorId       String
+  tanggal_pertemuan DateTime
+  description       String   @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
