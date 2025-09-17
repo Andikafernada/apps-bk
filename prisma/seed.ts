@@ -9,10 +9,10 @@ async function main() {
 
   // Delete all existing data to start fresh
   // The order is important to avoid foreign key constraint errors
-  await prisma.treatment.deleteMany();
-  await prisma.case.deleteMany();
-  await prisma.student.deleteMany();
-  await prisma.user.deleteMany();
+  await prisma.treatment.deleteMany({});
+  await prisma.case.deleteMany({});
+  await prisma.student.deleteMany({});
+  await prisma.user.deleteMany({});
   
   console.log('Old data deleted.');
 
