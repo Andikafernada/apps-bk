@@ -1,20 +1,34 @@
 
 import { notFound } from "next/navigation"
-import { students, cases } from "@/lib/data"
 import { placeholderImages } from "@/lib/placeholder-images"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import Link from "next/link"
+import prisma from "@/lib/db"
+import { format } from "date-fns"
 
-export default function StudentDetailsPage({ params }: { params: { id: string } }) {
-  const student = students.find((s) => s.id === params.id)
+export default async function StudentDetailsPage({ params }: { params: { id: string } }) {
+  const student = await prisma.student.findUnique({
+    where: { id: params.id },
+    include: {
+      cases: {
+        include: {
+          counselor: true,
+        },
+        orderBy: {
+          lastMeeting: 'desc'
+        }
+      }
+    }
+  })
+
   if (!student) {
     notFound()
   }
 
-  const studentCases = cases.filter(c => c.studentName === student.name);
+  const { cases: studentCases } = student;
   const avatar = placeholderImages.find(p => p.id === student.avatarId)
 
   return (
@@ -47,7 +61,7 @@ export default function StudentDetailsPage({ params }: { params: { id: string } 
             <CardHeader>
                 <CardTitle>Case History</CardTitle>
                  <CardDescription>All counseling cases related to {student.name}.</CardDescription>
-            </CardHeader>
+            </Header>
             <CardContent>
                  <Table>
                     <TableHeader>
@@ -71,8 +85,8 @@ export default function StudentDetailsPage({ params }: { params: { id: string } 
                                     {caseItem.status}
                                 </Badge>
                             </TableCell>
-                            <TableCell>{caseItem.counselorName}</TableCell>
-                            <TableCell>{caseItem.lastMeeting}</TableCell>
+                            <TableCell>{caseItem.counselor.name}</TableCell>
+                            <TableCell>{format(new Date(caseItem.lastMeeting), "PPP")}</TableCell>
                           </TableRow>
                         )) : (
                             <TableRow>

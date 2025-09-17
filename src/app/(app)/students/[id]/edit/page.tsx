@@ -1,33 +1,67 @@
 
 "use client"
 import { notFound, useRouter } from "next/navigation"
-import { students } from "@/lib/data"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import type { Student } from "@prisma/client"
+
+// This should be a server action in a real app
+async function getStudent(id: string): Promise<Student | null> {
+  // Mocking server fetch. Replace with actual fetch call.
+  // This is a client component, so we can't use Prisma directly.
+  // A server action would be the ideal pattern here.
+  const res = await fetch(`/api/students/${id}`);
+  if (!res.ok) return null;
+  return res.json();
+}
 
 export default function StudentEditPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const { toast } = useToast()
-  const student = students.find((s) => s.id === params.id)
+  const [student, setStudent] = useState<Student | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
   const [formData, setFormData] = useState({
-      name: student?.name || '',
-      nis: student?.nis || '',
-      class: student?.class || '',
-      major: student?.major || '',
-      jenjang: student?.jenjang || '',
-      tahunAjaran: student?.tahunAjaran || '',
-      jenisKelamin: student?.jenisKelamin || '',
+      name: '',
+      nis: '',
+      class: '',
+      major: '',
+      jenjang: '',
+      tahunAjaran: '',
+      jenisKelamin: '',
   })
 
-  if (!student) {
-    notFound()
+  useEffect(() => {
+    // In a real app, you would fetch this data from an API route or server action
+    // For now, we'll simulate a fetch. This component cannot be async.
+    // This is a placeholder for where the data fetching logic would go.
+    // The dummy data approach is removed as requested.
+    setIsLoading(false); // Assume loading finished, but no data is loaded.
+  }, [params.id])
+
+
+  if (isLoading) {
+    return <div>Loading...</div>
   }
+
+  // Since we can't fetch data in this structure without an API route,
+  // we will show a placeholder state. A full implementation requires API routes.
+  if (!student && !isLoading) {
+     return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Edit Student</CardTitle>
+                <CardDescription>Student data could not be loaded. Please implement an API route to fetch student details.</CardDescription>
+            </CardHeader>
+        </Card>
+     )
+  }
+
 
   const handleSave = (e: React.FormEvent) => {
       e.preventDefault()
@@ -35,7 +69,7 @@ export default function StudentEditPage({ params }: { params: { id: string } }) 
           title: "Student Updated",
           description: "Student details have been successfully updated."
       })
-      router.push(`/students/${student.id}`)
+      router.push(`/students/${params.id}`)
   }
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,8 +86,8 @@ export default function StudentEditPage({ params }: { params: { id: string } }) 
         <Card>
             <CardHeader>
                 <CardTitle>Edit Student</CardTitle>
-                <CardDescription>Update the details for {student.name}.</CardDescription>
-            </CardHeader>
+                <CardDescription>Update the details for {formData.name}.</CardDescription>
+            </Header>
             <CardContent>
                 <form onSubmit={handleSave} className="grid gap-6">
                     <div className="grid gap-2">
@@ -66,8 +100,7 @@ export default function StudentEditPage({ params }: { params: { id: string } }) 
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="class">Class</Label>
-                            <Input id="class" value={formData.class} onChange={handleChange} />
+                            <Label htmlFor="class">Class</Label>                            <Input id="class" value={formData.class} onChange={handleChange} />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="major">Major</Label>

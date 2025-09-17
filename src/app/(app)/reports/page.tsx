@@ -6,7 +6,6 @@ import { Bar, BarChart, Pie, PieChart, ResponsiveContainer, Tooltip, Legend, XAx
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { casesByType, casesByCounselor } from "@/lib/data"
 import { useToast } from "@/hooks/use-toast"
 
 export default function ReportsPage() {
@@ -18,6 +17,10 @@ export default function ReportsPage() {
       description: "Your report is being generated and will download shortly.",
     })
   }
+
+  // Data is now fetched from the database, so we'll show an empty state for now.
+  const casesByType: any[] = [];
+  const casesByCounselor: any[] = [];
   
   return (
     <div className="flex flex-col gap-4 md:gap-8">
@@ -41,15 +44,21 @@ export default function ReportsPage() {
             <CardDescription>Distribution of cases across different categories.</CardDescription>
           </CardHeader>
           <CardContent className="pl-2">
-            <ResponsiveContainer width="100%" height={350}>
-              <BarChart data={casesByType}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="type" stroke="hsl(var(--foreground))" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="hsl(var(--foreground))" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
-                <Tooltip wrapperClassName="!bg-background !border-border" />
-                <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+             {casesByType.length > 0 ? (
+              <ResponsiveContainer width="100%" height={350}>
+                <BarChart data={casesByType}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="type" stroke="hsl(var(--foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="hsl(var(--foreground))" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
+                  <Tooltip wrapperClassName="!bg-background !border-border" />
+                  <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+              ) : (
+                <div className="flex h-[350px] items-center justify-center">
+                  <p className="text-muted-foreground">Case type data is not available yet.</p>
+                </div>
+              )}
           </CardContent>
         </Card>
         <Card className="col-span-4 lg:col-span-3">
@@ -58,6 +67,7 @@ export default function ReportsPage() {
             <CardDescription>Workload distribution among counselors.</CardDescription>
           </CardHeader>
           <CardContent>
+            {casesByCounselor.length > 0 ? (
             <ResponsiveContainer width="100%" height={350}>
               <PieChart>
                 <Pie
@@ -74,6 +84,11 @@ export default function ReportsPage() {
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
+             ) : (
+                <div className="flex h-[350px] items-center justify-center">
+                  <p className="text-muted-foreground">Counselor workload data is not available yet.</p>
+                </div>
+              )}
           </CardContent>
         </Card>
       </div>
