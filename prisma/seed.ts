@@ -7,15 +7,9 @@ const prisma = new PrismaClient()
 async function main() {
   console.log(`Start seeding ...`)
 
-  // Delete all existing data to start fresh
-  // The order is important to avoid foreign key constraint errors
-  await prisma.treatment.deleteMany({});
-  await prisma.case.deleteMany({});
-  await prisma.student.deleteMany({});
-  await prisma.user.deleteMany({});
+  // This script now ONLY creates a default admin user.
+  // All deletion logic has been removed to prevent seeding errors on a fresh database.
   
-  console.log('Old data deleted.');
-
   const defaultPassword = 'bkpasundan2';
   const hashedPassword = await bcrypt.hash(defaultPassword, 10);
 
